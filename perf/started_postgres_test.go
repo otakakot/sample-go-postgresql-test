@@ -11,7 +11,7 @@ import (
 )
 
 func TestStartedPostgresPgx(t *testing.T) {
-	dsn := cmp.Or(os.Getenv("DSN"), "postgres://postgres:password@localhost:5432/postgres?sslmode=disable")
+	dsn := cmp.Or(os.Getenv("DSN"), "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable")
 
 	conn, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
@@ -29,7 +29,7 @@ func TestStartedPostgresPgx(t *testing.T) {
 }
 
 func TestStartedPostgresPq(t *testing.T) {
-	dsn := cmp.Or(os.Getenv("DSN"), "postgres://postgres:password@localhost:5432/postgres?sslmode=disable")
+	dsn := cmp.Or(os.Getenv("DSN"), "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable")
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
