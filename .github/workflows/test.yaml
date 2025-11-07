@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 jobs:
   embedded_postgres_test_pgx:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout
@@ -17,7 +17,7 @@ jobs:
         run: |
           go test ./perf/... -v -run ^TestEmbeddedPostgresPgx$
   embedded_postgres_test_pq:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
         run: |
           go test ./perf/... -v -run ^TestEmbeddedPostgresPq$
   testcontainers_test_pgx:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout
@@ -43,7 +43,7 @@ jobs:
         run: |
           go test ./perf/... -v -run ^TestTestcontainersPgx$
   testcontainers_test_pq:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout
@@ -67,7 +67,7 @@ jobs:
           - 5432:5432
         options: >-
           --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout
@@ -91,7 +91,7 @@ jobs:
           - 5432:5432
         options: >-
           --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout
@@ -104,7 +104,7 @@ jobs:
         run: |
           go test ./perf/... -v -run ^TestStartedPostgresPq$
   ramsql_test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout
