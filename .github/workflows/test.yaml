@@ -19,4 +19,4 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./... -run ^${{ matrix.target }}$
+          go test ./perf/... -run ^${{ matrix.target }}$
