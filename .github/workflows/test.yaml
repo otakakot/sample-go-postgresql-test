@@ -3,17 +3,9 @@ run-name: ${{ github.ref_name }} by @${{ github.actor }} ${{ github.workflow }}
 on:
   workflow_dispatch:
 jobs:
-  test:
+  embedded_postgres_test_pgx:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
-    strategy:
-      matrix:
-        target:
-          - TestEmbeddedPostgresPgx
-          - TestEmbeddedPostgresPq
-          - TestTestcontainersPgx
-          - TestTestcontainersPq
-          - TestRamsql
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -23,4 +15,104 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./test/... -v -run ^${{ matrix.target }}$
+          go test ./perf/... -v -run ^TestEmbeddedPostgresPgx$
+  embedded_postgres_test_pq:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: go.mod
+      - name: Run test
+        run: |
+          go test ./perf/... -v -run ^TestEmbeddedPostgresPq$
+  testcontainers_test_pgx:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: go.mod
+      - name: Run test
+        run: |
+          go test ./perf/... -v -run ^TestTestcontainersPgx$
+  testcontainers_test_pq:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: go.mod
+      - name: Run test
+        run: |
+          go test ./perf/... -v -run ^TestTestcontainersPq$
+  started_postgres_test_pgx:
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: go.mod
+      - name: Run test
+        run: |
+          go test ./perf/... -v -run ^TestStartedPostgresPgx$
+  started_postgres_test_pq:
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: go.mod
+      - name: Run test
+        run: |
+          go test ./perf/... -v -run ^TestStartedPostgresPq$
+  ramsql_test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: go.mod
+      - name: Run test
+        run: |
+          go test ./perf/... -v -run ^TestRamsql$
