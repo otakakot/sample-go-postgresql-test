@@ -1,4 +1,4 @@
-name: test
+name: perf
 run-name: ${{ github.ref_name }} by @${{ github.actor }} ${{ github.workflow }}
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./test/... -v -run ^TestEmbeddedPostgresPgx$
+          go test ./perf/... -v -run ^TestEmbeddedPostgresPgx$
   embedded_postgres_test_pq:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -28,7 +28,7 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./test/... -v -run ^TestEmbeddedPostgresPq$
+          go test ./perf/... -v -run ^TestEmbeddedPostgresPq$
   testcontainers_test_pgx:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -41,7 +41,7 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./test/... -v -run ^TestTestcontainersPgx$
+          go test ./perf/... -v -run ^TestTestcontainersPgx$
   testcontainers_test_pq:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -54,7 +54,7 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./test/... -v -run ^TestTestcontainersPq$
+          go test ./perf/... -v -run ^TestTestcontainersPq$
   started_postgres_test_pgx:
     services:
       postgres:
@@ -78,7 +78,7 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./test/... -v -run ^TestStartedPostgresPgx$
+          go test ./perf/... -v -run ^TestStartedPostgresPgx$
   started_postgres_test_pq:
     services:
       postgres:
@@ -102,7 +102,7 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./test/... -v -run ^TestStartedPostgresPq$
+          go test ./perf/... -v -run ^TestStartedPostgresPq$
   ramsql_test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -115,4 +115,4 @@ jobs:
           go-version-file: go.mod
       - name: Run test
         run: |
-          go test ./test/... -v -run ^TestRamsql$
+          go test ./perf/... -v -run ^TestRamsql$
