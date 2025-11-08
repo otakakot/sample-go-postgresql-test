@@ -78,7 +78,7 @@ jobs:
           go-version-file: go.mod
       - name: Initialize database schema
         run: |
-          PGPASSWORD=postgres psql -h localhost -U postgres -d postgres -f schema/schema.sql
+          PGPASSWORD=postgres psql -h localhost -U postgres -d postgres -f schema/*.sql
       - name: Run test
         run: |
           go test ./test/... -v -run ^TestStartedPostgresPgx$
@@ -105,7 +105,7 @@ jobs:
           go-version-file: go.mod
       - name: Initialize database schema
         run: |
-          PGPASSWORD=postgres psql -h localhost -U postgres -d postgres -f schema/schema.sql
+          PGPASSWORD=postgres psql -h localhost -U postgres -d postgres -f schema/*.sql
       - name: Run test
         run: |
           go test ./test/... -v -run ^TestStartedPostgresPq$
