@@ -37,12 +37,12 @@ func TestTestcontainersPgx(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	conn, err := pgxpool.ParseConfig(dsn)
+	cfg, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	pool, err := pgxpool.NewWithConfig(t.Context(), conn)
+	pool, err := pgxpool.NewWithConfig(t.Context(), cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -79,12 +79,12 @@ func TestTestcontainersPq(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	conn, err := pgxpool.ParseConfig(dsn)
+	cfg, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	pool, err := pgxpool.NewWithConfig(t.Context(), conn)
+	pool, err := pgxpool.NewWithConfig(t.Context(), cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
