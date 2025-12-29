@@ -1,6 +1,6 @@
 module github.com/otakakot/sample-go-postgresql-test
 
-go 1.25.4
+go 1.25.5
 
 require (
 	github.com/fergusstrange/embedded-postgres v1.33.0
