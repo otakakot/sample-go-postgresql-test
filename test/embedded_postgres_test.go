@@ -3,6 +3,9 @@ package test_test
 import (
 	"database/sql"
 	"errors"
+	"os"
+	"path/filepath"
+	"sort"
 	"testing"
 
 	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
@@ -37,14 +40,22 @@ func TestEmbeddedPostgresPgx(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, err := pool.Exec(t.Context(), `
-	CREATE TABLE IF NOT EXISTS samples (
-		id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-		name TEXT NOT NULL,
-		created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
-	)`); err != nil {
+	migrations, err := filepath.Glob(filepath.Join("../schema", "*.sql"))
+	if err != nil {
 		t.Fatal(err)
+	}
+
+	sort.Strings(migrations)
+
+	for _, migration := range migrations {
+		schema, err := os.ReadFile(migration)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if _, err := pool.Exec(t.Context(), string(schema)); err != nil {
+			t.Fatal(err)
+		}
 	}
 
 	var id string
@@ -99,14 +110,22 @@ func TestEmbeddedPostgresPq(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, err := db.ExecContext(t.Context(), `
-	CREATE TABLE IF NOT EXISTS samples (
-		id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-		name TEXT NOT NULL,
-		created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
-	)`); err != nil {
+	files, err := filepath.Glob("../schema/*.sql")
+	if err != nil {
 		t.Fatal(err)
+	}
+
+	sort.Strings(files)
+
+	for _, file := range files {
+		schema, err := os.ReadFile(file)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if _, err := db.ExecContext(t.Context(), string(schema)); err != nil {
+			t.Fatal(err)
+		}
 	}
 
 	var id string
